@@ -22,7 +22,7 @@ if __name__ == "__main__":
                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
                    ' Chrome/86.0.4240.193 Safari/537.36'}
 
-    for start_letter in tqdm("abcdefghijklmnopqrstuvwxyz", unit="letters"):
+    for start_letter in tqdm("bcdfghjklmnpqrstvwxz", unit="letters"):
         page = requests.get(f"https://uk.newonnetflix.info/catalogue/a2z/all/{start_letter}", headers=headers)
         soup = BeautifulSoup(page.content, 'html.parser')
         infopop_a_tags = soup.find_all('a', class_="infopop")
