@@ -6,3 +6,4 @@ requests >= 2.24.0
 tqdm == 4.47.0
 python-dotenv == 0.15.0
 bs4 == 0.0.1
+mysql == 0.0.2
