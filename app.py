@@ -11,7 +11,6 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 from src.db_fns import create_engine2, sql_db_to_df
-from src.streamlit_fns import full_film_df
 
 #%% Funciton for site
 def main():
