@@ -8,6 +8,7 @@
 
 #%% Import any modules required for the functions
 from sqlalchemy import create_engine 
+import mysql
 import pandas as pd
 import os
 
