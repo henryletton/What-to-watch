@@ -29,8 +29,5 @@ CREATE TABLE IF NOT EXISTS W2W_Group_User_Mapping (
     group_name text
 	,user_name text
 	,timestamp_gu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY (group_name(50)) );
-
-
-
+	,PRIMARY KEY (group_name(50), user_name(50)) );
 
