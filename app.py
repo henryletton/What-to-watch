@@ -26,8 +26,8 @@ def main():
     print(dict_cache)
     
     # Input options for user
+    new_or_exist = st.sidebar.radio('Are you a new or exisitng user:', ['New','Existing'])
     user_name = st.sidebar.text_input('User name', '')
-    new_or_exist = st.sidebar.radio('New or exisitng user:', ['New','Existing'])
     group_name = st.sidebar.text_input('Group name', '')
     # Page sidebar serves as page navigator for user
     page = st.sidebar.empty()
