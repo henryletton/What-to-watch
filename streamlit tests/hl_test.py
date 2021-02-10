@@ -19,6 +19,10 @@ import plotly.express as px
 def get_data():
     url = "http://data.insideairbnb.com/united-states/ny/new-york-city/2019-09-12/visualisations/listings.csv"
     return pd.read_csv(url)
+
+def head_date():
+    st.dataframe(df.head())
+
 df = get_data()
 
 # Start with heading and quote
@@ -28,7 +32,8 @@ st.header("Customary quote")
 st.markdown("> I just love to go home, no matter where I am [...]")
 
 # Data view
-st.dataframe(df.head())
+head_date()
+#st.dataframe(df.head())
 #st.table(df.head()) #static
 
 # Show code blocks, also st.echo
@@ -46,7 +51,7 @@ st.map(df_expensive)
 # User selecting columns
 cols = ["name", "host_name", "neighbourhood", "room_type", "price"]
 st_ms = st.multiselect("Columns", df.columns.tolist(), default=cols)
-st.dataframe(df[st_ms])
+st.dataframe(df.head()[st_ms])
 
 # JSON Rendering
 st.json({
@@ -103,6 +108,22 @@ btn = st.button("Celebrate!")
 if btn:
     st.balloons()
 
+# Select options
+st.button('Hit me')
+st.checkbox('Check me out')
+st.radio('Radio', [1,2,3])
+st.selectbox('Select', [1,2,3])
+st.multiselect('Multiselect', [1,2,3])
+st.slider('Slide me', min_value=0, max_value=10)
+st.select_slider('Slide to select', options=['Yes','Maybe','No'])
+st.text_input('Enter some text')
+st.number_input('Enter a number')
+st.text_area('Area for textual entry')
+st.date_input('Date input')
+st.time_input('Time entry')
+st.file_uploader('File uploader')
+st.color_picker('Pick a color')
+
 # Beta columns
 left_column, right_column = st.beta_columns(2)
 left_column.button('Press me!')
@@ -112,9 +133,32 @@ with right_column:
         ("Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"))
     st.write(f"You are in {chosen} house!")
 
+# Test film with rating option
+film_column, rating_column, picture_column = st.beta_columns(3)
+with film_column:
+    st.write('Sound of Music')
+    st.write('8.8 on IMDB')
+    st.write('Thriller, horror')
+with rating_column:
+    st.select_slider('Slide to select', options=['Yes','Maybe','No'],
+                    value = 'Maybe')
+with picture_column:
+    st.image('https://pyxis.nymag.com/v1/imgs/09d/64c/95abab7ece31abcfb22867b5803384248b-24-saw-puppet.rsquare.w700.jpg', use_column_width=True)
 
 
 
 
+def rate_movie(movie):
+    film_column, rating_column = st.beta_columns(2)
+    with film_column:
+        st.write(movie)
+    with rating_column:
+        st.select_slider('Slide to select', options=['Yes','Maybe','No'],
+                         value = 'Maybe')
 
+def rate_movies(movie_list):
+    for movie in movie_list:
+        rate_movie(movie)
+
+#rate_movie('Ice Age 3')
 

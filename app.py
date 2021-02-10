@@ -11,22 +11,42 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 from src.db_fns import create_engine2, sql_db_to_df
+from src.st_fns import check_names
+
+#%% Create any objects here that need to persist outside of page refreshes
+engine = create_engine2() # DB connection
+dict_cache= {} # Dictionary for forks in page layout
+dict_cache['user_confirmed'] = False
 
 #%% Funciton for site
 def main():
-    #engine = create_engine2()
+    
+    # Persistent dictionary object (within session not all sessions)
+    #dict_cache = cache_dict()
+    print(dict_cache)
+    
+    # Input options for user
     user_name = st.sidebar.text_input('User name', '')
+    new_or_exist = st.sidebar.radio('New or exisitng user:', ['New','Existing'])
     group_name = st.sidebar.text_input('Group name', '')
     # Page sidebar serves as page navigator for user
-    page = st.sidebar.selectbox('Choose a page', ['Rate Films', 'Your Preferences', 'Group Preferences'])
+    page = st.sidebar.empty()
+    
+    # Handling of username name and group
+    if not dict_cache['user_confirmed']:
+        check_names(engine, user_name, group_name, new_or_exist)
+        dict_cache['user_confirmed'] = True
+    
+    # Only show page options once 
+    if dict_cache['user_confirmed']:
+        page = page.selectbox('Choose a page', ['Rate Films', 'Your Preferences', 'Group Preferences'])
 
-    if user_name == '':
-        st.warning('Please input a user name.')
-        st.stop()
-
+    #st.write('Stopping here')
+    #st.stop()
+    
     if page == 'Rate Films':
         st.header('Rate Films')
-        st.write('Please select your preferences for movies belwow')
+        st.write('Please select your preferences for movies below')
         st.write('If you wish to erase all previous preferences, then click _Erase_ below.')
         if st.button('Erase'):
             st.write(f'Preferences deleted at {datetime.now()}')
@@ -44,6 +64,8 @@ def main():
             st.stop()
         st.title('Group Preferences')
         st.write(f'Below shows preferences for films in the group {group_name}')
+
+
 
 #%% Load film data from database and cahce
 @st.cache
