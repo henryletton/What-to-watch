@@ -8,14 +8,19 @@
 
 #%% Import any modules required for the functions
 import streamlit as st
-from src.db_fns import user_name_exist, group_name_exist, add_user, add_user_to_group
+from src.db_fns import user_name_exist, add_user
+import regex as re
 
 #%% Require user and group names before loading rest of site
-def check_names(engine, user_name, group_name, new_or_exist):
+def check_un(engine, user_name, new_or_exist):
     
     
     if user_name == '':
         st.warning('Please input a user name.')
+        st.stop()
+        
+    if bool(re.search('[^A-Za-z0-9]', user_name)):
+        st.warning('User names must only contain numbers or letters')
         st.stop()
         
     if user_name_exist(engine, user_name):
@@ -29,14 +34,9 @@ def check_names(engine, user_name, group_name, new_or_exist):
             st.stop()
         else:
             add_user(engine, user_name)
-            st.write('New user created')
-
-    if group_name == '':
-        st.warning('Please input a group name.')
-        st.stop()
-
-    if not group_name_exist(engine, group_name):
-        add_user_to_group(engine, user_name, group_name)
+            st.warning('New user created')
         
     return
     
+#%% 
+

@@ -139,15 +139,30 @@ def add_user_to_group(engine, user_name, group_name):
         
     return
 
+#%% Add rating 
+def add_user_rating(engine, user_name, film_name, film_year, rating):
+    
+    # Connext to db
+    engine.connect()
+    
+    # Insert user and group in
+    query = "REPLACE INTO W2W_User_Rating (user_name, title, year, rating) VALUES (%s, %s, %s, %s)"
+    with engine.begin() as cnx:
+        cnx.execute(query, (user_name, film_name, film_year, rating))
+        
+    return
+
+
 #%% Testing
-engine = create_engine2()
-test_name = 'test1'
-test_gname = 'gtest1'
-test_user = user_name_exist(engine, test_name)
-add_user(engine, test_name)
-test_user2 = user_name_exist(engine, test_name)
+# engine = create_engine2()
+# test_name = 'test1'
+# test_gname = 'gtest1'
+# test_user = user_name_exist(engine, test_name)
+# add_user(engine, test_name)
+# test_user2 = user_name_exist(engine, test_name)
 
-test_group = group_name_exist(engine, test_gname)
-add_user_to_group(engine, test_name, test_gname)
-test_group2 = group_name_exist(engine, test_gname)
+# test_group = group_name_exist(engine, test_gname)
+# add_user_to_group(engine, test_name, test_gname)
+# test_group2 = group_name_exist(engine, test_gname)
 
+# add_user_rating(engine, 'test1', 'test2', 2021, 5)

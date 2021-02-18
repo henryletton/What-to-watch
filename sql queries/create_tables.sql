@@ -31,3 +31,14 @@ CREATE TABLE IF NOT EXISTS W2W_Group_User_Mapping (
 	,timestamp_gu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	,PRIMARY KEY (group_name(50), user_name(50)) );
 
+/*Table to store user film ratings*/
+CREATE TABLE IF NOT EXISTS W2W_User_Rating (
+    user_name text
+	,title text
+	,year int
+	,rating int
+	,timestamp_ur TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	,PRIMARY KEY (user_name(50), title(50), year) );
+	
+	
+	
