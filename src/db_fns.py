@@ -128,6 +128,10 @@ def add_user(engine, user_name):
 #%% Add new group
 def add_group(engine, group_name):
     
+    # Do not add blank group
+    if group_name == '':
+        return
+    
     # Connext to db
     engine.connect()
     
@@ -143,6 +147,10 @@ def add_group(engine, group_name):
 
 #%% Add user to group
 def add_user_to_group(engine, user_name, group_name):
+    
+    # Do not add blank group
+    if group_name == '':
+        return
     
     # Connext to db
     engine.connect()
