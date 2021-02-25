@@ -10,6 +10,7 @@
 from sqlalchemy import create_engine 
 import pandas as pd
 import os
+import hashlib
 
 #%% Load system variables from .env file, not required on Heroku
 from dotenv import load_dotenv
@@ -41,8 +42,8 @@ def sql_db_to_df(engine,
 def insert_film_db(engine,
                    details,
                    update = False,
-                   query = """W2W_Films (title, year, description, platform, tag)
-                        VALUES (%s, %s, %s, %s, %s)"""):
+                   query = """W2W_Films (title, year, description, platform, tag, film_key)
+                        VALUES (%s, %s, %s, %s, %s, %s)"""):
     
     # Updating requires updating old row, else it will be skipped
     if update:
@@ -50,10 +51,21 @@ def insert_film_db(engine,
     else:
         query_full = f"INSERT IGNORE INTO {query}"
     
+    # Add film key to tuple
+    str_to_hash = str(details[0]) + str(details[1])
+    film_key = hashlib.md5(str_to_hash.encode()).hexdigest()
+    details_list = list(details)
+    details_list.append(film_key)
+    details2 = tuple(details_list)
+    
+    # Connext to db
     engine.connect()                        
     
+    # Insert/ignore/replace film row
     with engine.begin() as cnx:
-        cnx.execute(query_full, details)
+        cnx.execute(query_full, details2)
+    
+    return
 
 #%% Check if username exists
 def user_name_exist(engine, user_name):
