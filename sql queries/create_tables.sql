@@ -15,31 +15,32 @@ CREATE TABLE IF NOT EXISTS W2W_Films (
 
 /*Table to store user information*/
 CREATE TABLE IF NOT EXISTS W2W_Users (
-    user_name text
+    user_key text
+	,user_name text
 	,timestamp_u TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY (user_name(50)) );
+	,PRIMARY KEY (user_key(32)) );
 	
 /*Table to store group information*/
 CREATE TABLE IF NOT EXISTS W2W_Groups (
-    group_name text
+    group_key text
+	,group_name text
 	,timestamp_g TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY (group_name(50)) );
+	,PRIMARY KEY (group_key(32)) );
 
 /*Table to store group user mapping*/
 CREATE TABLE IF NOT EXISTS W2W_Group_User_Mapping (
-    group_name text
-	,user_name text
+    group_key text
+	,user_key text
 	,timestamp_gu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY (group_name(50), user_name(50)) );
+	,PRIMARY KEY (group_key(32), user_key(32)) );
 
 /*Table to store user film ratings*/
 CREATE TABLE IF NOT EXISTS W2W_User_Rating (
-    user_name text
-	,title text
-	,year int
+    user_key text
+	,film_key text
 	,rating int
 	,timestamp_ur TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	,PRIMARY KEY (user_name(50), title(50), year) );
+	,PRIMARY KEY (user_key(32), film_key(32)) );
 	
 	
 	

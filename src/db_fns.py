@@ -115,10 +115,13 @@ def add_user(engine, user_name):
     # Connext to db
     engine.connect()
     
+    # Create user key
+    user_key = hashlib.md5(user_name.encode()).hexdigest()
+    
     # Insert user name in
-    query = "INSERT IGNORE INTO W2W_Users (user_name) VALUES (%s)"
+    query = "INSERT IGNORE INTO W2W_Users (user_key, user_name) VALUES (%s, %s)"
     with engine.begin() as cnx:
-        cnx.execute(query, user_name)
+        cnx.execute(query, (user_key, user_name))
         
     return
 
@@ -128,10 +131,13 @@ def add_group(engine, group_name):
     # Connext to db
     engine.connect()
     
+    # Create group key
+    group_key = hashlib.md5(group_name.encode()).hexdigest()
+    
     # Insert user name in
-    query = "INSERT IGNORE INTO W2W_Groups (group_name) VALUES (%s)"
+    query = "INSERT IGNORE INTO W2W_Groups (group_key, group_name) VALUES (%s, %s)"
     with engine.begin() as cnx:
-        cnx.execute(query, group_name)
+        cnx.execute(query, (group_key, group_name))
         
     return
 
@@ -144,23 +150,30 @@ def add_user_to_group(engine, user_name, group_name):
     # Add group, if not exist
     add_group(engine, group_name)
     
+    # Create unique keys
+    user_key = hashlib.md5(user_name.encode()).hexdigest()
+    group_key = hashlib.md5(group_name.encode()).hexdigest()
+    
     # Insert user and group in
-    query = "INSERT IGNORE INTO W2W_Group_User_Mapping (user_name, group_name) VALUES (%s, %s)"
+    query = "INSERT IGNORE INTO W2W_Group_User_Mapping (group_key, user_key) VALUES (%s, %s)"
     with engine.begin() as cnx:
-        cnx.execute(query, (user_name, group_name))
+        cnx.execute(query, (group_key, user_key))
         
     return
 
 #%% Add rating 
-def add_user_rating(engine, user_name, film_name, film_year, rating):
+def add_user_rating(engine, user_name, film_key, rating):
     
     # Connext to db
     engine.connect()
     
+    # Create user key
+    user_key = hashlib.md5(user_name.encode()).hexdigest()
+    
     # Insert user and group in
-    query = "REPLACE INTO W2W_User_Rating (user_name, title, year, rating) VALUES (%s, %s, %s, %s)"
+    query = "REPLACE INTO W2W_User_Rating (user_key, film_key, rating) VALUES (%s, %s, %s)"
     with engine.begin() as cnx:
-        cnx.execute(query, (user_name, film_name, film_year, rating))
+        cnx.execute(query, (user_key, film_key, rating))
         
     return
 

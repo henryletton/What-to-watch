@@ -64,8 +64,9 @@ def main():
         
         # Film info to be stored with rating
         idx = dict_cache['films_rated']
-        current_film_title = W2W_Films['title'][idx]
-        current_film_year = int(W2W_Films['year'][idx])
+        #current_film_title = W2W_Films['title'][idx]
+        #current_film_year = int(W2W_Films['year'][idx])
+        current_film_key = W2W_Films['film_key'][idx]
         
         # Text rating is mapped to number
         # Only stored once user clicks a button
@@ -78,7 +79,7 @@ def main():
             rating = -1
         if rating != -99:
             add_user_rating(engine, dict_cache["user_name"], 
-                            current_film_title, current_film_year, rating)
+                            current_film_key, rating)
             # Increment ensures different film after refresh
             dict_cache['films_rated'] = dict_cache['films_rated'] + 1
         
