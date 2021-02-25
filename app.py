@@ -14,7 +14,7 @@ from src.db_fns import create_engine2, sql_db_to_df, add_user_to_group, add_user
 from src.st_fns import check_un
 
 #%% Create any objects here that need to persist outside of page refreshes
-engine = create_engine2() # DB connection
+#engine = create_engine2() # DB connection
 
 #%% Funciton for site
 def main():
@@ -34,7 +34,7 @@ def main():
     
     # Handling of user name
     if not dict_cache['user_confirmed']:
-        check_un(engine, user_name, new_or_exist)
+        check_un(dict_cache['engine'], user_name, new_or_exist)
         dict_cache['user_confirmed'] = True
         dict_cache['user_name'] = user_name
     
@@ -45,7 +45,7 @@ def main():
         page = page_w.selectbox('Choose a page', ['Rate Films', 'Your Preferences', 'Group Preferences'])
 
     # Create group and/or add user to group
-    add_user_to_group(engine, dict_cache['user_name'], group_name)
+    add_user_to_group(dict_cache['engine'], dict_cache['user_name'], group_name)
 
     #st.write('Stopping here')
     #st.stop()
@@ -78,7 +78,7 @@ def main():
         if st.button('Skip'):
             rating = -1
         if rating != -99:
-            add_user_rating(engine, dict_cache["user_name"], 
+            add_user_rating(dict_cache['engine'], dict_cache["user_name"], 
                             current_film_key, rating)
             # Increment ensures different film after refresh
             dict_cache['films_rated'] = dict_cache['films_rated'] + 1
@@ -122,7 +122,8 @@ def load_films():
 #%% Persist data with dictionary
 @st.cache(allow_output_mutation=True)
 def cache_dict():
-    temp_dict = {'user_confirmed' : False,
+    temp_dict = {'engine' : create_engine2(),
+                 'user_confirmed' : False,
                  'films_rated' : 0}
     return temp_dict
 
