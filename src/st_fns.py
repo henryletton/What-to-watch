@@ -97,11 +97,11 @@ def pref_page(dict_cache):
 #%% Details of group preferences page
 def gpref_page(dict_cache):
     
-    if dict_cache["user_name"] == '':
+    if dict_cache["group_name"] == '':
         st.warning('Group preferences will appear once you specify a group')
         st.stop()
     st.title('Group Preferences')
-    st.write(f'Below shows preferences for films in the group {dict_cache["user_name"]}')
+    st.write(f'Below shows preferences for films in the group {dict_cache["group_name"]}')
     return
 
 
