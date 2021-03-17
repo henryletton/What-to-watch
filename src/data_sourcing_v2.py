@@ -152,7 +152,7 @@ while new_film_urls_short:
     
     
     count += 1
-    film_urls_done.append(new_film_urls_short)
+    film_urls_done.append(film_url_short)
     new_film_urls_short.pop(0)
 
 # Convert list of dictionaries into a dataframe
