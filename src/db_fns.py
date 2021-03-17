@@ -182,7 +182,7 @@ def add_user_rating(engine, user_name, film_key, rating):
     # Insert user and group in
     query = "REPLACE INTO W2W_User_Rating (user_key, film_key, rating) VALUES (%s, %s, %s)"
     with engine.begin() as cnx:
-        cnx.execute(query, (user_key, film_key, rating))
+        cnx.execute(query, (user_key, str(film_key), rating))
         
     return
 
