@@ -18,7 +18,7 @@ import hashlib
 # Move to correct folder
 import os
 os.getcwd()
-os.chdir('C:/Users/henry/OneDrive/Documents/AXA Insurance/Henry and Max Projects/What-to-watch')
+os.chdir('')
 
 # Download .gz files
 files = ['title.basics','title.ratings']
