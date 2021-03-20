@@ -14,12 +14,12 @@ from src.db_fns import create_engine2, df_to_sql_db, sql_db_to_df
 import numpy as np
 
 #%% Loop through site to get full list of film urls
-# Define list of all catelogue pages with films on
-catelogue_urls_short = [f'/catalogue/a2z/all/{catelogue_page}' for catelogue_page in list('abcdefghijklmnopqrstuvwxyz')]
-catelogue_urls_short.insert(0, '/catalogue/a2z/all')
+# Define list of all catalogue pages with films on
+catalogue_urls_short = [f'/catalogue/a2z/all/{catalogue_page}' for catalogue_page in list('abcdefghijklmnopqrstuvwxyz')]
+catalogue_urls_short.insert(0, '/catalogue/a2z/all')
 
 # Empty list to populate 
-catelogue_urls_short_compl = []
+catalogue_urls_short_compl = []
 
 # Empty list to add film urls to
 film_urls_short = []
@@ -28,14 +28,14 @@ headers = {'User-Agent':
            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
            ' Chrome/86.0.4240.193 Safari/537.36'}
 
-# Loop through catelogue_urls
-while catelogue_urls_short:
+# Loop through catalogue_urls
+while catalogue_urls_short:
 
-    catelogue_url_short = catelogue_urls_short[0]
-    catelogue_url = f'https://uk.newonnetflix.info{catelogue_url_short}'
+    catalogue_url_short = catalogue_urls_short[0]
+    catalogue_url = f'https://uk.newonnetflix.info{catalogue_url_short}'
     
-    response = requests.get(catelogue_url, headers=headers)
-    print(f'{catelogue_url_short} - {response.status_code}')
+    response = requests.get(catalogue_url, headers=headers)
+    print(f'{catalogue_url_short} - {response.status_code}')
     
     soup = BeautifulSoup(response.content, 'html.parser')
     
@@ -46,20 +46,20 @@ while catelogue_urls_short:
     
     
     # Check if there are any next pages
-    next_page = soup.findAll('a', attrs={'href': re.compile(f'^{catelogue_url_short}\?start')})
+    next_page = soup.findAll('a', attrs={'href': re.compile(f'^{catalogue_url_short}\?start')})
     
     # Skip this section if no next pages
     if next_page:
         next_pages = list(set([link.get('href') for link in next_page]))
         
-        # If page in neither list, needs to be added to catelogue list
+        # If page in neither list, needs to be added to catalogue list
         for page in next_pages:
-            if page not in catelogue_urls_short_compl and page not in catelogue_urls_short:
-                catelogue_urls_short.append(page)
+            if page not in catalogue_urls_short_compl and page not in catalogue_urls_short:
+                catalogue_urls_short.append(page)
                 
                 
-    catelogue_urls_short.pop(0)
-    catelogue_urls_short_compl.append(catelogue_url_short)
+    catalogue_urls_short.pop(0)
+    catalogue_urls_short_compl.append(catalogue_url_short)
 
 #%% Use film urls and previously stored films to get new and removed Netflix film lists
 # Dedup film links
