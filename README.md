@@ -12,5 +12,6 @@ There is currently no deploy for the main branch, but you can access the develop
 ### HL Develop Branch
 [![Build Status](https://www.travis-ci.com/HennersMcGee/What-to-watch.svg?branch=dev_hl)](https://www.travis-ci.com/HennersMcGee/What-to-watch)
 
-
+## Other Badges
+[![HitCount](http://hits.dwyl.com/HennersMcGee/What-to-watch.svg)](http://hits.dwyl.com/HennersMcGee/What-to-watch)
 
