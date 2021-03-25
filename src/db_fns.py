@@ -232,17 +232,3 @@ def df_to_sql_db(engine,
         cnx.execute(drop_table_sql)
     
     return
-
-#%% Testing
-# engine = create_engine2()
-# test_name = 'test1'
-# test_gname = 'gtest1'
-# test_user = user_name_exist(engine, test_name)
-# add_user(engine, test_name)
-# test_user2 = user_name_exist(engine, test_name)
-
-# test_group = group_name_exist(engine, test_gname)
-# add_user_to_group(engine, test_name, test_gname)
-# test_group2 = group_name_exist(engine, test_gname)
-
-# add_user_rating(engine, 'test1', 'test2', 2021, 5)
