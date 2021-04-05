@@ -108,7 +108,6 @@ def rate_film_page(dict_cache):
     
     df_merge = urated_films_df.merge(grated_films_df, on='film_key', how='outer', indicator=True)
     films_to_rate = df_merge.loc[df_merge['_merge'] == "right_only"]["film_key"].tolist()
-    print(films_to_rate)
     if films_to_rate:
         rand_film = random.choice(films_to_rate)
         films_to_rate.remove(rand_film)
