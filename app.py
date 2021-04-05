@@ -45,9 +45,10 @@ def main():
     add_user_to_group(dict_cache['engine'], dict_cache['user_name'], group_name)
     dict_cache['group_name'] = group_name
 
-    # Create hash to geenrate random film choices off of
+    # Create hash to generate random film choices off of
     if not dict_cache["random_hash"]:
-        dict_cache["random_hash"] = int(hashlib.md5((str(datetime.datetime.now()) + group_name + user_name).encode()).hexdigest(), 16)
+        string_to_hash = str(datetime.datetime.now()) + group_name + user_name
+        dict_cache["random_hash"] = int(hashlib.md5(string_to_hash.encode()).hexdigest(), 16)
     
     # Page specific results to show
     if page == 'Rate Films':
@@ -74,7 +75,6 @@ def load_films():
 def cache_dict():
     temp_dict = {'engine' : create_engine2(),
                  'user_confirmed' : False,
-                 'films_rated' : 0,
                  'random_hash': None}
     temp_dict['W2W_Films'] = sql_db_to_df(temp_dict['engine'], 'W2W_Films')
     return temp_dict

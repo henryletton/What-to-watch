@@ -136,7 +136,7 @@ def rate_film_page(dict_cache):
         # Create new hash for new random film
         dict_cache['random_hash'] += random.randrange(-n_films, n_films)
     
-    # Film info shown needs to be after the films_rated has been incremented
+    # Film info shown needs to be after the hash has changed
     next_film_title = film_row['title']
     
     next_film_year = int(film_row['year'])
