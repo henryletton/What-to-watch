@@ -66,7 +66,61 @@ def insert_film_db(engine,
         cnx.execute(query_full, details2)
     
     return
+    
+#%% Functions to get rated films
+def get_user_rated_films(engine, user_name):
+    # Connect to database - this works but outputs an sql error for some reason
+    engine.connect()
+    # Run query for table
+    df_films = pd.read_sql_query("""
+    SELECT b.film_key, b.title, b.year, a.rating
+    FROM W2W_User_Rating a 
+    INNER JOIN W2W_Films b 
+    on a.film_key = b.film_key 
+    where a.user_key = %s
+    order by timestamp_ur desc""", engine, params=(hashlib.md5(user_name.encode()).hexdigest(),))
+    return df_films
 
+def get_group_rated_films(engine, group_name):
+    
+    # Connect to database - this works but outputs an sql error for some reason
+    engine.connect()
+    # Run query for table
+    df_films = pd.read_sql_query("""
+    SELECT c.film_key, c.title, c.year, avg(rating) as group_rating, count(rating) as number_of_ratings
+    FROM W2W_User_Rating a 
+    LEFT JOIN W2W_Group_User_Mapping b 
+    on a.user_key = b.user_key 
+    INNER JOIN W2W_Films c
+    on a.film_key=c.film_key
+    where b.group_key = %s
+    group by c.title, c.year
+    order by group_rating desc
+    """, engine, params=(hashlib.md5(group_name.encode()).hexdigest(),))
+    return df_films
+    
+#%% Function to search database for film
+def search_film(engine, search_query):
+    
+    # Connect to database - this works but outputs an sql error for some reason
+    engine.connect()
+    # Run query for table
+    df_search = pd.read_sql_query("""
+    SELECT film_key, title, description, year from W2W_Films 
+    where title like %s
+    """, engine, params=(f"%{search_query}%",))
+    return df_search
+    
+#%% Function to get number of films in database
+def get_film_count(engine):
+    # Connect to database - this works but outputs an sql error for some reason
+    engine.connect()
+    # Run query for table
+    n_films = pd.read_sql_query("""
+    SELECT count(film_key) from W2W_Films
+    """, engine)
+    return n_films.values[0][0]
+    
 #%% Check if username exists
 def user_name_exist(engine, user_name):
     
@@ -180,22 +234,9 @@ def add_user_rating(engine, user_name, film_key, rating):
     
     # Insert user and group in
     query = "REPLACE INTO W2W_User_Rating (user_key, film_key, rating) VALUES (%s, %s, %s)"
+    
     with engine.begin() as cnx:
-        cnx.execute(query, (user_key, film_key, rating))
+        cnx.execute(query, (user_key, str(film_key), rating))
         
     return
 
-
-#%% Testing
-# engine = create_engine2()
-# test_name = 'test1'
-# test_gname = 'gtest1'
-# test_user = user_name_exist(engine, test_name)
-# add_user(engine, test_name)
-# test_user2 = user_name_exist(engine, test_name)
-
-# test_group = group_name_exist(engine, test_gname)
-# add_user_to_group(engine, test_name, test_gname)
-# test_group2 = group_name_exist(engine, test_gname)
-
-# add_user_rating(engine, 'test1', 'test2', 2021, 5)
