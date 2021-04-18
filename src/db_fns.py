@@ -101,15 +101,27 @@ def get_group_rated_films(engine, group_name):
     return df_films
     
 #%% Function to search database for film
-def search_film(engine, search_query):
+def search_film(engine, search_query, genre_query):
     
     # Connect to database - this works but outputs an sql error for some reason
     engine.connect()
+    #genre_query = genre_query.lower()
+    # Create equivalent string for swapping "comedy" with "comdies" and vice versa
+    # Won't have desired result if it contains both, but that hopefully shouldn't happen
+    if "comedy" in genre_query:
+        genre_query2 = genre_query.replace("comedy", "comedies")
+    elif "comedies" in genre_query:
+        genre_query2 = genre_query.replace("comedies", "comedy")
+    else:
+        # Something that won't affect the search
+        genre_query2 = "kadsjlhfgiasdufhiuhiiiids"
     # Run query for table
     df_search = pd.read_sql_query("""
-    SELECT film_key, title, description, year from W2W_Films 
+    SELECT film_key, title, description, year, genres from W2W_Films 
     where title like %s
     """, engine, params=(f"%{search_query}%",))
+    df_search["genres"] = df_search["genres"].str.lower()
+    df_search = df_search[df_search["genres"].str.contains(f"{genre_query}|{genre_query2}")]
     return df_search
     
 #%% Function to get number of films in database
