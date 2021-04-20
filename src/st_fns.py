@@ -43,7 +43,8 @@ def rate_film_page(dict_cache):
     st.header('Search for Film')
     search_placeholder = st.empty()
     search_query = search_placeholder.text_input('Film name', '')
-    df_search = search_film(dict_cache["engine"], search_query)
+    genre_query = st.text_input('Genre', '')
+    df_search = search_film(dict_cache["engine"], search_query, genre_query)
     num_results = len(df_search.index)
     
     # Check if search query is not empty
