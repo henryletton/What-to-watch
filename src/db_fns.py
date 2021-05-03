@@ -105,7 +105,7 @@ def search_film(engine, search_query, genre_query):
     
     # Connect to database - this works but outputs an sql error for some reason
     engine.connect()
-    #genre_query = genre_query.lower()
+    genre_query = genre_query.lower()
     # Create equivalent string for swapping "comedy" with "comdies" and vice versa
     # Won't have desired result if it contains both, but that hopefully shouldn't happen
     if "comedy" in genre_query:

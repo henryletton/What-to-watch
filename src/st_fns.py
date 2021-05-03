@@ -42,7 +42,12 @@ def rate_film_page(dict_cache):
 
     st.header('Search for Film')
     search_placeholder = st.empty()
-    search_query = search_placeholder.text_input('Film name', '')
+    # Get search query if it doesn't exist (avoid overwriting it if it does - this allows detection of whether there's a film ready to rate)
+    # This will clear once the film has been rated
+    try:
+        search_query
+    except:
+        search_query = search_placeholder.text_input('Film name', '')
     genre_query = st.text_input('Genre', '')
     df_search = search_film(dict_cache["engine"], search_query, genre_query)
     num_results = len(df_search.index)
@@ -74,22 +79,25 @@ def rate_film_page(dict_cache):
             search_film_info_w.write(f'Do you want to watch {search_film_title}, released in {search_film_year}')
             search_film_desc_w.write(search_film_description)
             
-            # Text rating is mapped to number
-            # Only stored once user clicks a button
-            rating = -99
-            if st.button('Yes, looks rad!', key="search_good"):
-                rating = 5
-            if st.button('No, I have taste!', key="search_bad"):
-                rating = 0
-            if st.button('Skip', key="search_skip"):
-                rating = -1
-            if rating != -99:
-                # Create new hash for new random film
-                dict_cache['random_hash'] += random.randrange(-n_films, n_films)
-                add_user_rating(dict_cache['engine'], dict_cache["user_name"], search_current_film_key, rating)
-               
-            # Clear search once search has found a film
-            search_query = search_placeholder.text_input('Film name', value='', key=1)
+        # Text rating is mapped to number
+        # Only stored once user clicks a button
+        rating = -99
+        if st.button('Yes, looks rad!', key="search_good"):
+            rating = 5
+        if st.button('No, I have taste!', key="search_bad"):
+            rating = 0
+        if st.button('Skip', key="search_skip"):
+            rating = -1
+        if rating != -99:
+            # Create new hash for new random film
+            #dict_cache['random_hash'] += random.randrange(-n_films, n_films)
+            add_user_rating(dict_cache['engine'], dict_cache["user_name"], search_current_film_key, rating)
+            
+            # Clear search_query when film has been rated
+            search_placeholder.text_input('Film name', value='', key=1)
+            
+            search_film_info_w.write('')
+            search_film_desc_w.write('')
         
     else:
         st.write("Please enter film to search for")
